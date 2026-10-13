@@ -31,13 +31,20 @@ jobs:
           pip install -r requirements.txt
           pip install pytest httpx
 
+      - name: Verify Project Structure
+        run: |
+          pwd
+          ls -la
+          ls -la src
+          ls -la tests
+
       - name: Check Python Syntax
         run: |
           python -m compileall -q src main.py app.py
 
       - name: Run Pytest
         env:
-          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          PYTHONPATH: ${{ github.workspace }}
           GROQ_MODEL: openai/gpt-oss-20b
         run: |
-          pytest -v
+          python -m pytest tests/ -v
